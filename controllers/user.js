@@ -1,26 +1,33 @@
-const { response } = require("express");
+const { response, request } = require("express");
 const bcrypt = require("bcryptjs");
 
 const User = require("../models/user");
+const user = require("../models/user");
 
-const useriosGet = (req, res) => {
-  const { q, name = "no name", apikey, page = 1, limit } = req.query;
+const useriosGet = async (req = request, res = response) => {
+  //const { q, name = "no name", apikey, page = 1, limit } = req.query;
+  const { limit = 5, from = 0 } = req.query;
+  const users = await User.find().limit(Number(limit)).skip(Number(from));
 
   res.json({
-    msg: "get API - controller",
-    q,
-    name,
-    apikey,
-    page,
-    limit,
+    users,
   });
 };
 
-const useriosPut = (req, res) => {
-  const id = req.params.id;
+const useriosPut = async (req, res = response) => {
+  const { id } = req.params;
+  const { _id, password, google, email, ...resto } = req.body;
+
+  // TODO validar contra base de daos
+  if (password) {
+    //Encriptar la contraseña
+    const salt = bcrypt.genSaltSync();
+    resto.password = bcrypt.hashSync(password, salt);
+  }
+  const user = await User.findByIdAndUpdate(id, resto);
+
   res.json({
-    msg: "put API - controller",
-    id,
+    user,
   });
 };
 
