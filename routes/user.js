@@ -54,7 +54,15 @@ router.post(
   useriosPost,
 );
 
-router.delete("/:id", useriosDelete);
+router.delete(
+  "/:id",
+  [
+    check("id", "No es un ID válido").isMongoId(),
+    check("id").custom(existeUsuarioPorId),
+    validatedFields,
+  ],
+  useriosDelete,
+);
 
 router.patch("/:id", useriosPatch);
 

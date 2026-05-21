@@ -53,11 +53,16 @@ const useriosPost = async (req, res) => {
   });
 };
 
-const useriosDelete = (req, res) => {
-  res.json({
-    ok: true,
-    msg: "delete API - controller",
-  });
+const useriosDelete = async (req, res = response) => {
+  
+  const { id } = req.params;
+  
+  // Fisicamente lo borramos
+  const user = await User.findByIdAndUpdate(id, { estado: false });
+
+  res.json(
+    user,
+  );
 };
 
 const useriosPatch = (req, res) => {
