@@ -5,7 +5,6 @@ const User = require("../models/user");
 const user = require("../models/user");
 
 const useriosGet = async (req = request, res = response) => {
-  
   const { limit = 5, from = 0 } = req.query;
   const query = { estado: true };
 
@@ -54,15 +53,12 @@ const useriosPost = async (req, res) => {
 };
 
 const useriosDelete = async (req, res = response) => {
-  
   const { id } = req.params;
-  
+
   // Fisicamente lo borramos
   const user = await User.findByIdAndUpdate(id, { estado: false });
 
-  res.json(
-    user,
-  );
+  res.json(user);
 };
 
 const useriosPatch = (req, res) => {
