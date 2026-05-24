@@ -6,7 +6,7 @@ const {
   validateJWT,
   validateRoles,
   hasRole,
-} = require("../middlewares/index");
+} = require("../middlewares");
 
 const {
   esRoleValido,
