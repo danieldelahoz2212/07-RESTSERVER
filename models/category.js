@@ -6,10 +6,6 @@ const categorySchema = new Schema({
         required: [true, 'El nombre es obligatorio'],
         unique: true
     },
-    description: {
-        type: String,
-        required: [true, 'La descripción es obligatoria']
-    },
     estado: {
         type: Boolean,
         default: true,
