@@ -18,7 +18,6 @@ const findCategories = async (req, res = response) => {
     categories,
   });
 };
-S;
 
 //obtener categorias - populate {}
 const findCategory = async (req, res = response) => {
