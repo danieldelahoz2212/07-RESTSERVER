@@ -2,7 +2,13 @@ const { Router } = require("express");
 const { check } = require("express-validator");
 
 const { validatedFields, validateJWT } = require("../middlewares");
-const { createCategory, findCategories, findCategory, updateCategory, deleteCategory } = require("../controllers/categories");
+const {
+  createCategory,
+  findCategories,
+  findCategory,
+  updateCategory,
+  deleteCategory,
+} = require("../controllers/categories");
 const { existeCategoriaPorId } = require("../helpers/db-validators");
 
 const router = Router();
@@ -11,9 +17,11 @@ const router = Router();
 router.get("/", findCategories);
 
 //obtener una categoria por id - publico
-router.get("/:id",[
-  check('id').custom(existeCategoriaPorId),
-], findCategory);
+router.get(
+  "/:id",
+  [check("id").custom(existeCategoriaPorId), validateJWT],
+  findCategory,
+);
 
 //crear categoria - privado - cualquier persona con un token valido
 router.post(
@@ -27,15 +35,17 @@ router.post(
 );
 
 //actualizar categoria - privado - cualquier persona con un token valido
-router.put("/:id", [
-  check('id').custom(existeCategoriaPorId),
-], updateCategory);
+router.put(
+  "/:id",
+  [check("id").custom(existeCategoriaPorId), validateJWT],
+  updateCategory,
+);
 
 //borrar categoria - privado - solo admin
-router.delete("/:id", (req, res) => {
-  res.json({
-    msg: "delete API - controller",
-  });
-});
+router.delete(
+  "/:id",
+  [check("id").custom(existeCategoriaPorId), validateJWT],
+  deleteCategory
+);
 
 module.exports = router;
