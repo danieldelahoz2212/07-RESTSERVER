@@ -4,16 +4,16 @@ const { Category } = require("../models");
 //Crear categoria - paginado - total - populate
 const findCategories = async (req, res = response) => {
   const { limit = 5, from = 2 } = req.query;
+  const query = { estado: true };
 
   const [total, categories] = await Promise.all([
-    Category.countDocuments({ estado: true }),
-    Category.find({ estado: true })
+    Category.countDocuments(query),
+    Category.find(query)
       .populate("user", "name")
       .skip(Number(from))
       .limit(Number(limit)),
   ]);
 
-  console.log(total, categories);
   res.json({
     total,
     categories,
@@ -58,6 +58,10 @@ const createCategory = async (req, res = response) => {
 const updateCategory = async (req, res = response) => {
   const { id } = req.params;
   const { state, user, ...data } = req.body;
+
+  data.name = data.name.toUpperCase();
+  data.user = req.user._id;
+
   const category = await Category.findByIdAndUpdate(id, data, { new: true });
 
   res.json(category);
