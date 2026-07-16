@@ -45,7 +45,12 @@ router.post(
 //actualizar producto - privado - cualquier persona con un token valido
 router.put(
   "/:id",
-  [validateJWT, check("id").custom(existeProductoPorId), validatedFields],
+  [
+    validateJWT,
+    check("id", "No es un ID válido").isMongoId(),
+    check("id").custom(existeProductoPorId),
+    validatedFields,
+  ],
   updateProduct,
 );
 

@@ -44,7 +44,12 @@ router.post(
 //actualizar categoria - privado - cualquier persona con un token valido
 router.put(
   "/:id",
-  [check("id").custom(existeCategoriaPorId), validateJWT, validatedFields],
+  [
+    validateJWT,
+    validatedFields,
+    check("id", "No es un ID válido").isMongoId(),
+    check("id").custom(existeCategoriaPorId),
+  ],
   updateCategory,
 );
 
