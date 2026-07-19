@@ -9,7 +9,8 @@ const fileUpload = async(req, res = response) => {
   }
 
   try {
-    const pathFull = await uploadFile(req.files.file);
+    // const pathFull = await uploadFile(req.files.file,['txt','md'], 'textos');
+    const pathFull = await uploadFile(req.files.file, undefined, 'imgs');
 
     res.json({
         path: pathFull,

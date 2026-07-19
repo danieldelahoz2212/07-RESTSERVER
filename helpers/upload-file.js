@@ -1,4 +1,5 @@
 const path = require("path");
+const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
 
 const uploadFile = (
@@ -19,6 +20,10 @@ const uploadFile = (
 
     const uniqueName = `${uuidv4()}.${extension}`;
     const uploadPath = path.join(__dirname, "../uploads", folder, uniqueName);
+    const uploadDir = path.dirname(uploadPath);
+
+    // Crear el directorio si no existe
+    fs.mkdirSync(uploadDir, { recursive: true });
 
     file.mv(uploadPath, (err) => {
       if (err) {
