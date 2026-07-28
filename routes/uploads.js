@@ -24,7 +24,6 @@ router.put(
 
 router.get(  "/:collection/:id",
   [
-    validateFiles,
     check("id", "Id must be a valid Mongo ID").isMongoId(),
     check("collection").custom((c) =>
       coleccionesPermitidas(c, ["users", "products"]),

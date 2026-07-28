@@ -50,10 +50,10 @@ const updateImage = async (req, res) => {
   }
 
   //limpiar imagenes previas
-  if (model.img){
+  if (model.img) {
     //hay que borrar la imagen en el servidor
     const pathImage = path.join(__dirname, "../uploads", collection, model.img);
-    if(fs.existsSync(pathImage)){
+    if (fs.existsSync(pathImage)) {
       fs.unlinkSync(pathImage);
     }
   }
@@ -67,12 +67,51 @@ const updateImage = async (req, res) => {
   res.json(model);
 };
 
-const showFiles = (req, res = response)=>{
+const showFiles = async (req, res = response) => {
+  const { id, collection } = req.params;
 
-}
+  let model;
+
+  switch (collection) {
+    case "users":
+      model = await User.findById(id);
+      if (!model) {
+        return res.status(400).json({
+          msg: `No existe un usuario con el id ${id}`,
+        });
+      }
+      break;
+
+    case "products":
+      model = await Product.findById(id);
+      if (!model) {
+        return res.status(400).json({
+          msg: `No existe un producto con el id ${id}`,
+        });
+      }
+      break;
+
+    default:
+      return res.status(500).json({ msg: "Se me olvido validar esto" });
+  }
+
+  //limpiar imagenes previas
+  if (model.img) {
+    //hay que borrar la imagen en el servidor
+    const pathImage = path.join(__dirname, "../uploads", collection, model.img);
+    if (fs.existsSync(pathImage)) {
+
+      return res.sendFile(pathImage);
+    }
+  }
+
+  res.json({
+    msg: "No hay imagenes",
+  });
+};
 
 module.exports = {
   fileUpload,
   updateImage,
-  showFiles
+  showFiles,
 };
