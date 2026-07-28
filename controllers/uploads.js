@@ -22,6 +22,7 @@ const fileUpload = async (req, res = response) => {
 };
 
 const updateImage = async (req, res) => {
+
   const { id, collection } = req.params;
 
   let model;
@@ -34,6 +35,7 @@ const updateImage = async (req, res) => {
           msg: `No existe un usuario con el id ${id}`,
         });
       }
+
       break;
 
     case "products":
@@ -43,6 +45,7 @@ const updateImage = async (req, res) => {
           msg: `No existe un producto con el id ${id}`,
         });
       }
+
       break;
 
     default:
@@ -59,7 +62,6 @@ const updateImage = async (req, res) => {
   }
 
   const nameFile = await uploadFile(req.files.file, undefined, collection);
-
   model.img = nameFile;
 
   await model.save();
@@ -95,19 +97,16 @@ const showFiles = async (req, res = response) => {
       return res.status(500).json({ msg: "Se me olvido validar esto" });
   }
 
-  //limpiar imagenes previas
   if (model.img) {
-    //hay que borrar la imagen en el servidor
-    const pathImage = path.join(__dirname, "../uploads", collection, model.img);
+    // Si la imagen existe, la mostramos
+    const pathImage = path.join(__dirname, '../uploads', collection, model.img);
     if (fs.existsSync(pathImage)) {
-
       return res.sendFile(pathImage);
     }
   }
 
-  res.json({
-    msg: "No hay imagenes",
-  });
+  const pathPlaceholder = path.join(__dirname, '../assets/no-image.jpg');
+  res.sendFile(pathPlaceholder);
 };
 
 module.exports = {

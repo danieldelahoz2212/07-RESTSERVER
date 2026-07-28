@@ -33,7 +33,7 @@ const uploadFile = (
         reject(err);
       }
 
-      resolve(uploadPath);
+      resolve(uniqueName);
     });
   });
 };
