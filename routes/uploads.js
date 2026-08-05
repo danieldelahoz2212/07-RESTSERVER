@@ -2,7 +2,7 @@ const { Router } = require("express");
 const { check } = require("express-validator");
 
 const { validatedFields, validateFiles } = require("../middlewares/index");
-const { fileUpload, updateImage, showFiles } = require("../controllers/uploads");
+const { fileUpload, updateImage, showFiles, updateImageCloudinary } = require("../controllers/uploads");
 const { coleccionesPermitidas } = require("../helpers");
 
 const router = Router();
@@ -19,7 +19,8 @@ router.put(
     ),
     validatedFields,
   ],
-  updateImage,
+  updateImageCloudinary,
+  // updateImage,
 );
 
 router.get(  "/:collection/:id",
