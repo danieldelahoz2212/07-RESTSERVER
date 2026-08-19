@@ -1,8 +1,8 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
-const { validatedFields } = require("../middlewares/validate_fields");
+const { validatedFields, validateJWT } = require("../middlewares");
 
-const { login, googleSignIn } = require("../controllers/auth");
+const { login, googleSignIn, renewToken } = require("../controllers/auth");
 
 const router = Router();
 
@@ -24,6 +24,8 @@ router.post(
   ],
   googleSignIn,
 );
+
+router.get("/", validateJWT, renewToken)
 
 router.get("/config", (req, res) => {
   res.json({ googleClientId: process.env.GOOGLE_CLIENT_ID });

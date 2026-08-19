@@ -1,63 +1,45 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <h1>Google Sign-In</h1>
-    <hr />
 
-    <div
-      id="g_id_onload"
-      data-client_id=""
-      data-callback="handleCredentialResponse"
-      data-auto_prompt="false"
-    ></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
 
-    <div
-      class="g_id_signin"
-      data-type="standard"
-      data-shape="rectangular"
-      data-theme="outline"
-      data-text="sign_in_with"
-      data-logo_alignment="left"
-      data-size="large"
-    ></div>
+<body class="container">
 
-    <script src="https://accounts.google.com/gsi/client" async></script>
+  <div class="row mt-5">
+    <div class="col-sm-6">
+      <h1>Google Sign-In</h1>
+      <hr>
+      <br>
+      <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline"
+        data-text="sign_in_with" data-logo_alignment="left" data-size="large"></div>
+      <br>
+      <button id="google_signout">Sign Out</button>
+    </div>
+    <div class="col-sm-6">
+      <h1>Login Manual</h1>
+      <hr>
+    <form class="d-grid gap-2">
+      <input type="text" name="email" class="form-control" placeholder="Email">
+      <input type="password" name="password" class="form-control" placeholder="Password">
+      <button type="submit" class="btn btn-primary">
+        Sign In
+      </button>
+    </form>
+    </div>
+  </div>
 
-    <button id="google_signout">Sign Out</button>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 
-    <script>
-      function handleCredentialResponse(response) {
-        const body = { id_token: response.credential };
+  <div id="g_id_onload" data-client_id="911719461602-4tq4eo9jtpdd5a6l53chjalaq5169gpd.apps.googleusercontent.com"
+    data-callback="handleCredentialResponse" data-auto_prompt="false"></div>
 
-        fetch("http://localhost:8080/api/auth/google", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(body),
-        })
-          .then((res) => res.json())
-          .then((resp) => {
-            console.log(resp);
-            localStorage.setItem("email", resp.user.email);
-          })
-          .catch(console.warn);
-      }
+  <script src="https://accounts.google.com/gsi/client" async></script>
+  <script src="./js/auth.js"></script>
+</body>
 
-      const button = document.getElementById("google_signout");
-      button.onclick = () => {
-        google.accounts.id.disableAutoSelect();
-
-        google.accounts.id.revoke(localStorage.getItem("email"), (done) => {
-          localStorage.clear();
-          location.reload();
-        });
-      };
-    </script>
-  </body>
 </html>

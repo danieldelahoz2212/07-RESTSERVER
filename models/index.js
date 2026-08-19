@@ -1,4 +1,5 @@
 const Category = require("./category");
+const ChatMessage = require("./chat-message");
 const Product = require("./products");
 const Role = require("./role");
 const Server = require("./server");
@@ -10,4 +11,5 @@ module.exports = {
   Role,
   Server,
   User,
+  ChatMessage
 };
